@@ -1,0 +1,222 @@
+@import 'compass';
+@import 'foundation/components/global';
+@import 'foundation/functions';
+@import 'globals';
+
+.experience-container {
+
+  //Utility mixin to set spacing on elements
+  @mixin spacing() {
+    margin-bottom: rem-calc(10px);
+  }
+
+  @include spacing;
+  border: 1px solid $divider-color;
+
+  transition: box-shadow .3s ease;
+
+  > header {
+    @include spacing;
+
+    background-color: #F5F5F5;
+    border-bottom: 1px solid $divider-color;
+    padding: rem-calc(15px);
+  }
+
+  .organization-logo {
+    @include spacing;
+
+    text-align: center;
+
+    img {
+      height: rem-calc(80px);
+    }
+  }
+
+  .skills-used {
+    @include display-flex;
+
+    line-height: rem-calc(16px);
+    text-align: center;
+    color: $primary-color-text;
+    font-size: rem-calc(12px);
+
+    .short {
+      display: none;
+
+      @media #{$small-only} {
+        display: inline;
+      }
+    }
+
+    .long {
+
+      @media #{$small-only} {
+        display: none;
+      }
+    }
+  }
+
+  .content {
+    padding: rem-calc(15px);
+  }
+
+  .overview {
+    @include spacing;
+  }
+
+  .company-info, .position-info {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+  }
+
+  .company-info .location, .position-info .date {
+    color: $secondary-text-color;
+    text-align: right;
+  }
+
+  .contributions {
+    @media #{$medium-up}{
+      width: 60%;
+    }
+  }
+
+  .samples {
+
+    header {
+      margin: 0 auto;
+      @include spacing;
+
+      text-align: center;
+      color: $divider-color;
+
+      box-shadow: 0px 4px 10px -6px;
+    }
+
+    .images {
+
+      @include display-flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .image {
+        cursor: pointer;
+        transition: box-shadow .3s ease;
+        &:hover {
+          box-shadow: 0 0 10px #afafaf;
+        }
+      }
+    }
+
+    .images-placeholder {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      color: $divider-color;
+
+      padding: rem-calc(30px) 0;
+
+      background: whitesmoke;
+      border-radius: 4px;
+    }
+
+    @media #{$small-only}{
+      .images {
+        @include flex-direction(column);
+        .image {
+          margin: rem-calc(5px) 0;
+        }
+      }
+    }
+  }
+
+  @mixin generate-skill-gradient($base-color, $skill) {
+    $classes: null;
+    //Create the class(es) for the skill(s)
+    @for $j from 1 through length($skill) {
+      $classes: append($classes, "."+nth($skill, $j), comma);
+    }
+
+    //Generate class name(s) based on skill name(s)
+    #{$classes} {
+      //Lighten top gradient by 15% of base color
+      @include background(linear-gradient(lighten($base-color, 15%), $base-color));
+      &:hover {
+        $hover-color: lighten(adjust_hue($base-color, 5%), 5%);
+        @include background(linear-gradient(lighten($hover-color, 15%), $hover-color));
+      }
+    }
+  }
+
+  /**
+   * Creates a successively brighter gradient class for each skill entered.
+   * If too many skills are passed the hue will be adjusted and the brightness reset to avoid having the gradients become too bright.
+   * Similar skills can be grouped to assign the same gradient to the skills
+   * @param $base-color - color in which gradients are based off of
+   * @param $skill - array of skills by name
+   */
+  @mixin generate-skills-gradient($base-color, $skills...) {
+    $base-color-copy: $base-color;
+    //Iterate through the skills
+    @for $i from 1 through length($skills) {
+      $skill: nth($skills, $i);
+
+      //Reset base color and adjust hue every 4th skill
+      @if $i % 4 == 0 {
+        $base-color: adjust_hue($base-color-copy, 30%);
+      }
+
+      @include generate-skill-gradient($base-color, $skill);
+
+      //lighten base color by 8% every iteration
+      $base-color: lighten($base-color, 8%);
+    }
+  }
+
+  //Programming skills are blue
+  @include generate-skills-gradient(#354B88, ('Java', 'GWT'), 'javascript');
+
+  //Design skills are green
+  @include generate-skills-gradient(#457362, 'css', 'Photoshop', 'Illustrator', ('Liquid', 'HTML'));
+}
+
+.reveal-modal {
+  @media #{$small-only}{
+    min-height: 0;
+  }
+}
+
+.experience-slider {
+  //Change slick slider control colors
+  .slick-prev:before, .slick-next:before {
+    color: #7f7f7f;
+  }
+
+  .experience-slide {
+    position: relative;
+
+    .slide-image {
+      margin: 0 auto rem-calc(10px) auto;
+      max-height: 100vh;
+    }
+
+    .slide-caption {
+      position: absolute;
+      bottom: 0;
+      padding: rem-calc(20px) 0;
+      margin: 0;
+
+      width: 100%;
+
+      background: rgba(0, 0, 0, .6);
+
+      text-align: center;
+      color: $primary-color-text;
+
+      @media #{$small-only}{
+        display: none;
+      }
+    }
+  }
+}

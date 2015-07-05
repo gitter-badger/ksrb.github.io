@@ -1,0 +1,234 @@
+@import 'compass';
+@import 'foundation/components/global';
+@import 'foundation/functions';
+@import 'globals';
+
+#skills {
+  $legend-height: 32px;
+  $legend-width: 755px;
+  $margin-bottom: 7px;
+
+  .legends {
+    @include display-flex;
+    color: $primary-color-text;
+    margin-bottom: $margin-bottom;
+    width: $legend-width;
+  }
+
+  .search {
+    visibility: hidden;
+
+    width: $legend-width;
+    height: 0;
+
+    margin: 0;
+    padding: 0;
+
+    transition: height 1s ease, visibility 1s ease, margin 1s ease, padding 1s ease;
+
+    &.show {
+      @extend .selected;
+
+      visibility: visible;
+      height: $legend-height;
+
+      padding: .5em;
+      margin: 0 0 $margin-bottom;
+    }
+  }
+
+  &:hover {
+    border-color: $primary-color;
+  }
+
+  .legend {
+    $transition-duration: .3s;
+
+    position: relative;
+    margin-right: 26px;
+
+    @include display-flex;
+    @include align-items(center);
+    @include justify-content(center);
+
+    background: $primary-color-dark;
+
+    height: $legend-height;
+    width: 90px;
+
+    cursor: pointer;
+
+    transition: background-color $transition-duration ease;
+
+    .name {
+      text-align: center;
+      font-size: 9px;
+    }
+
+    .legend-tooltip {
+      $border-color: #000000;
+
+      display: none;
+      position: absolute;
+      bottom: 42px;
+      left: -65px;
+
+      padding: 7px;
+      width: 225px;
+
+      background-color: $primary-color;
+      border-radius: 10px;
+
+      box-sizing: border-box;
+      opacity: 0;
+
+      transition: opacity $transition-duration ease;
+
+      &:after {
+        content: "";
+        display: block;
+
+        position: absolute;
+        left: 50%;
+        bottom: -19px;
+        transform: translate(-50%, 0);
+
+        border: 10px solid;
+        border-color: $primary-color transparent transparent;
+      }
+
+      p {
+        font-size: 11px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    &:hover {
+      .legend-tooltip {
+        display: block;
+        opacity: 1;
+      }
+    }
+
+    //Chevron rules
+    &:first-child {
+      width: 52px;
+
+      //Removed back of chevron
+      &:before {
+        border: none;
+      }
+    }
+
+    &:last-child {
+      width: 95px;
+      margin-right: 0;
+
+      //Remove front of chevron
+      &:after {
+        border: none;
+        margin: 0;
+      }
+    }
+
+    &:after, &:before {
+      content: "";
+
+      position: absolute;
+      top: 0;
+
+      transition: border-color $transition-duration ease;
+    }
+
+    //Back of chevron
+    &:before {
+      //Hide 1px white line that show up on mobile
+      right: 100%;
+
+      @media #{$small-only}{
+        //Hide 1px white line that show up on mobile
+        right: 99%;
+      }
+
+      border-top: $legend-height/2 solid $primary-color-dark;
+      border-left: 10px solid transparent;
+      border-bottom: $legend-height/2 solid $primary-color-dark;
+    }
+
+    //Front of chevron
+    &:after {
+      left: 100%;
+
+      @media #{$small-only}{
+        //Hide 1px white line that show up on mobile
+        left: 99%;
+      }
+
+      border-top: $legend-height/2 solid transparent;
+      border-left: 10px solid $primary-color-dark;
+      border-bottom: $legend-height/2 solid transparent;
+    }
+
+    &:hover, &.selected {
+      background: $primary-color;
+
+      &:after {
+        border-left: 10px solid $primary-color;
+      }
+      &:before {
+        border-top: $legend-height/2 solid $primary-color;
+        border-bottom: $legend-height/2 solid $primary-color;
+      }
+    }
+
+  }
+
+  .skill {
+    $height: 53px;
+    $transition-duration: .5s;
+
+    color: $primary-color-text;
+    margin-bottom: $margin-bottom;
+    transition: margin-bottom $transition-duration ease, opacity $transition-duration ease, height $transition-duration ease;
+
+    .skill-label {
+      width: 47px;
+      height: $height;
+      position: absolute;
+
+      .icon, .name {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, 0);
+      }
+
+      .icon {
+        top: 4px;
+      }
+
+      .name {
+        //Override foundation
+        margin: 0;
+        bottom: 0;
+        font-size: 10px;
+      }
+    }
+    .meter {
+      height: $height;
+    }
+
+    &.ng-enter, &.ng-move, &.ng-leave.ng-leave-active {
+      height: 0;
+      opacity: 0;
+      margin-bottom: 0px;
+    }
+
+    &.ng-leave, &.ng-enter.ng-enter-active, &ng-move.ng-move-active {
+      height: $height;
+      opacity: 1;
+      margin-bottom: $margin-bottom;
+    }
+  }
+}
